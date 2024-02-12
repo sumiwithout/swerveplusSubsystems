@@ -78,7 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
   private void updateMotionProfile() {
     m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
-    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint);
+    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint, m_startState, m_endState);
     m_timer.reset();
   }
 
@@ -94,7 +94,7 @@ public class ArmSubsystem extends SubsystemBase {
     if (m_profile.isFinished(elapsedTime)) {
       m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     } else {
-      m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
+      m_targetState = m_profile.calculate(elapsedTime);
     }
 
     m_feedforward =
